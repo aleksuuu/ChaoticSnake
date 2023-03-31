@@ -23,6 +23,11 @@ public class GameBehavior : MonoBehaviour
 
     private State _currentState;
 
+    [SerializeField] AudioClip playSceneSoundtrack;
+    [SerializeField] float soundtrackVol = 0.5f;
+    [SerializeField] AudioClip gameOverSfx;
+    [SerializeField] float sfxVol = 0.5f;
+
     public State CurrentState
     {
         get => _currentState;
@@ -32,20 +37,28 @@ public class GameBehavior : MonoBehaviour
             switch (value)
             {
                 case State.Start:
+                    AudioBehavior.Instance.PlayLoopSound(playSceneSoundtrack);
                     Reset();
                     GuiBehavior.Instance.UpdateMessageGUI(message: "Press W, A, S, or D to start!");
                     break;
                 case State.Play:
+                    AudioBehavior.Instance.FadeInLoop(soundtrackVol);
                     Time.timeScale = 1.0f;
                     GuiBehavior.Instance.UpdateMessageGUI(visibility: false);
                     break;
                 case State.Pause:
+                    Debug.Log("Pause");
                     Time.timeScale = 0.0f; // On pause set timeScale to 0 so that powerups and portals do not disappear
                     GuiBehavior.Instance.UpdateMessageGUI(message: "Press ESC again to quit and any other keys to resume");
                     break;
                 case State.GameOver:
+                    AudioBehavior.Instance.PlayOneShotSound(gameOverSfx, sfxVol);
+                    AudioBehavior.Instance.FadeOutLoop();
                     StopAllCoroutinesInScene();
                     GuiBehavior.Instance.UpdateMessageGUI(message: "GAME OVER! (Press return to restart)");
+                    break;
+                case State.PopUp:
+                    AudioBehavior.Instance.FadeOutLoop();
                     break;
                 // Do nothing if State.PopUp (meaning all the coroutines WOULD keep going, including the power-ups and portals)
             }

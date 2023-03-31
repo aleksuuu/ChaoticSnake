@@ -16,12 +16,12 @@ public class PopUpBehavior : MonoBehaviour
 
     private void OK()
     {
-        DecideButtonFunc(6, 2, 1);
+        DecideButtonFunc(1, 3, 4);
     }
 
     private void Cancel()
     {
-        DecideButtonFunc(2, 0, 4);
+        DecideButtonFunc(5, 1, 1);
         ErrMsgBehavior.Instance.PlayErrSound();
     }
 

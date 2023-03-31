@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class TitleSceneBehavior : MonoBehaviour
 {
     [SerializeField] Button startButton;
+    [SerializeField] AudioClip clickSound;
 
     private void Start()
     {
@@ -18,10 +19,9 @@ public class TitleSceneBehavior : MonoBehaviour
         }
     }
 
-
-
     private void GoToPlay()
     {
+        AudioBehavior.Instance.PlayOneShotSound(clickSound, 1.0f);
         SceneManager.LoadScene("PlayScene");
     }
 }

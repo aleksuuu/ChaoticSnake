@@ -26,6 +26,13 @@ public class SnakeBehavior : MonoBehaviour
     [SerializeField] Sprite slowingSprite;
     [SerializeField] Sprite invincibleSprite;
 
+    [SerializeField] AudioClip slowingSfx;
+    [SerializeField] AudioClip invincibleSfx;
+    [SerializeField] AudioClip foodSfx;
+    [SerializeField] AudioClip teleportSfx;
+
+    [SerializeField] float sfxVol = 0.75f;
+
     private Sprite _currentSprite;
 
     [SerializeField] float initTimestep = 0.1f; // 10 fps; this detemrines the speed of the snake; lower = faster
@@ -100,6 +107,7 @@ public class SnakeBehavior : MonoBehaviour
         // Using if/else instead of switch because CompareTag is more efficient than string comparison
         if (collision.CompareTag("Food"))
         {
+            AudioBehavior.Instance.PlayOneShotSound(foodSfx, sfxVol);
             Grow();
             SetScore(++_score);
         }
@@ -134,11 +142,13 @@ public class SnakeBehavior : MonoBehaviour
         }
         else if (collision.CompareTag("Slowing"))
         {
+            AudioBehavior.Instance.PlayOneShotSound(slowingSfx, sfxVol);
             StartCoroutine(SlowDown());
             PowerUpBehavior.Instance.DestroyCurrentPowerUp();
         }
         else if (collision.CompareTag("Invincible"))
         {
+            AudioBehavior.Instance.PlayOneShotSound(invincibleSfx, sfxVol);
             StartCoroutine(MakeInvincible());
             PowerUpBehavior.Instance.DestroyCurrentPowerUp();
         }
@@ -146,6 +156,7 @@ public class SnakeBehavior : MonoBehaviour
 
     private void Teleport(int fromPortalIdx)
     {
+        AudioBehavior.Instance.PlayOneShotSound(teleportSfx, sfxVol);
         if (_direction == Vector2.left || _direction == Vector2.right)
         {
             Vector3 fromPosition = PortalBehavior.Instance.GetPosition(fromPortalIdx);
@@ -164,7 +175,6 @@ public class SnakeBehavior : MonoBehaviour
             toPosition.y += _direction.y;
             transform.position = toPosition;
         }
-        // If neither conditions are met, do not teleport
     }
 
 
@@ -258,10 +268,6 @@ public class SnakeBehavior : MonoBehaviour
         _segments.Add(segment);
     }
 
-    //public void ResetTimestep()
-    //{
-    //    Time.fixedDeltaTime = _currentTimestep;
-    //}
 
     private IEnumerator ChangeSprite(Sprite newSprite)
     {

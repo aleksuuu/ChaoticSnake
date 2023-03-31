@@ -27,14 +27,14 @@ public class ErrMsgBehavior : MonoBehaviour
     [SerializeField] AudioClip clearSound;
 
 
-    [SerializeField] float sfxVolume = 0.125f;
+    [SerializeField] float sfxVolume = 0.5f;
 
     [SerializeField] Transform canvas;
     [SerializeField] Transform errMsgPrefab;
     private List<Transform> _errMsgs = new();
     private readonly float _popUpInterval = 15f;
     private bool _inCoroutine = false;
-    private readonly int _popUpChance = 10; // 0 (impossible) to 10 (new pop up every popUpInterval)
+    private readonly int _popUpChance = 2; // 0 (impossible) to 10 (new pop up every popUpInterval)
 
 
     void Update()
@@ -73,7 +73,7 @@ public class ErrMsgBehavior : MonoBehaviour
 
     private void MakeOnePopUp(Vector3 position)
     {
-        AudioBehavior.Instance.PlaySound(popUpSound, sfxVolume);
+        AudioBehavior.Instance.PlayOneShotSound(popUpSound, sfxVolume);
         Transform errMsg = Instantiate(errMsgPrefab);
         errMsg.position = position;
         errMsg.SetParent(canvas);
@@ -87,7 +87,7 @@ public class ErrMsgBehavior : MonoBehaviour
 
     public void CloseAllPopUps()
     {
-        AudioBehavior.Instance.PlaySound(allClearSound, sfxVolume);
+        AudioBehavior.Instance.PlayOneShotSound(allClearSound, sfxVolume);
         int num = _errMsgs.Count;
         if (num > 0)
         {
@@ -105,7 +105,7 @@ public class ErrMsgBehavior : MonoBehaviour
 
     public void CloseCurrentPopUp()
     {
-        AudioBehavior.Instance.PlaySound(clearSound, sfxVolume);
+        AudioBehavior.Instance.PlayOneShotSound(clearSound, sfxVolume);
         int num = _errMsgs.Count;
         if (num > 0 && _errMsgs[num - 1])
         {
@@ -122,11 +122,11 @@ public class ErrMsgBehavior : MonoBehaviour
     {
         if (Random.Range(0, 2) == 0)
         {
-            AudioBehavior.Instance.PlaySound(errSound1, sfxVolume);
+            AudioBehavior.Instance.PlayOneShotSound(errSound1, sfxVolume);
         }
         else
         {
-            AudioBehavior.Instance.PlaySound(errSound2, sfxVolume);
+            AudioBehavior.Instance.PlayOneShotSound(errSound2, sfxVolume);
         }
     }
 }
