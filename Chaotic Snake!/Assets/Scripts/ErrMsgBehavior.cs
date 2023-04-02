@@ -34,7 +34,7 @@ public class ErrMsgBehavior : MonoBehaviour
     private List<Transform> _errMsgs = new();
     private readonly float _popUpInterval = 15f;
     private bool _inCoroutine = false;
-    private readonly int _popUpChance = 2; // 0 (impossible) to 10 (new pop up every popUpInterval)
+    private readonly int _popUpChance = 1; // 0 (impossible) to 10 (new pop up every popUpInterval)
 
 
     void Update()
